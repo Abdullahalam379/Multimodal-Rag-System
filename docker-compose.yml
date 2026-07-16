@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  multimodal-rag:
+    build: .
+    container_name: multimodal-rag
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    volumes:
+      - ./data:/app/data
+      - ./chroma_db:/app/chroma_db
+
+    restart: unless-stopped
+
+  streamlit:
+    build: .
+    container_name: streamlit-ui
+
+    command:
+      [
+        ".venv/bin/streamlit",
+        "run",
+        "streamlit_app.py",
+        "--server.address=0.0.0.0",
+        "--server.port=8501",
+      ]
+
+    environment:
+      API_URL: http://multimodal-rag:8000
+
+    depends_on:
+      - multimodal-rag
+
+    ports:
+      - "8501:8501"
+
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+
+    ports:
+      - "9090:9090"
+
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+    depends_on:
+      - multimodal-rag
+
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
+    depends_on:
+      - prometheus
+
+    restart: unless-stopped
+
+volumes:
+  grafana-storage:

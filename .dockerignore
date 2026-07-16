@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual Environment
+.venv/
+venv/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# Python Cache
+.pytest_cache/
+.mypy_cache/
+
+# Streamlit Cache
+.streamlit/
+
+# Chroma Database
+chroma_db/
+
+# Data generated at runtime
+data/uploads/
+data/extracted_images/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

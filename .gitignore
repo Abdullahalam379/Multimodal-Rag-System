@@ -1,0 +1,28 @@
+# Environment
+.env
+
+# Virtual environment
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime data
+data/chroma_db/*
+!data/chroma_db/.gitkeep
+
+data/uploads/*
+!data/uploads/.gitkeep
+
+data/extracted_images/*
+!data/extracted_images/.gitkeep
