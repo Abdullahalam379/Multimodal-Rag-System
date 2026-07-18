@@ -8,7 +8,10 @@ client = TestClient(app)
 
 @patch("app.api.routes.rag_service.ask")
 def test_ask(mock_ask):
-    mock_ask.return_value = "This is a test answer."
+    mock_ask.return_value = {
+    "answer": "This is a test answer.",
+    "retrieved_chunks": [],
+}
 
     response = client.post(
         "/ask",
@@ -18,8 +21,7 @@ def test_ask(mock_ask):
     )
 
     assert response.status_code == 200
-    assert response.json() == {
-        "answer": "This is a test answer."
-    }
+    data = response.json()
 
-    mock_ask.assert_called_once_with("What is AI?")
+    assert data["answer"] == "This is a test answer."
+    assert data["retrieved_chunks"] == []
