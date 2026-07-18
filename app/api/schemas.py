@@ -1,5 +1,15 @@
 from pydantic import BaseModel
 
+class RetrievedChunk(BaseModel):
+    """
+    A single retrieved chunk used to answer the user's question.
+    """
+
+    content: str
+    source: str
+    page_number: int
+    content_type: str
+    chunk_id: int
 
 class AskRequest(BaseModel):
     """
@@ -15,7 +25,7 @@ class AskResponse(BaseModel):
     """
 
     answer: str
-
+    retrieved_chunks: list[RetrievedChunk]
 
 class HealthResponse(BaseModel):
     """
@@ -35,3 +45,10 @@ class IndexResponse(BaseModel):
     documents_extracted: int
     chunks_created: int
     vectors_stored: int
+
+class SampleIndexRequest(BaseModel):
+    """
+    Request for indexing one of the built-in sample PDFs.
+    """
+
+    sample: str

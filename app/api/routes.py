@@ -14,6 +14,7 @@ from app.api.schemas import (
     AskResponse,
     HealthResponse,
     IndexResponse,
+    SampleIndexRequest
 )
 from app.config.settings import settings
 from app.core.logger import logger
@@ -89,6 +90,44 @@ async def index_document(
 
 
 @router.post(
+    "/index-sample",
+    response_model=IndexResponse,
+)
+def index_sample_document(
+    request: SampleIndexRequest,
+):
+    """
+    Index one of the built-in sample PDFs.
+    """
+
+    REQUEST_COUNT.inc()
+
+    start = perf_counter()
+
+    with REQUEST_LATENCY.time():
+
+        sample_path = Path("docs") / request.sample
+
+        if not sample_path.exists():
+            raise HTTPException(
+                status_code=404,
+                detail="Sample document not found.",
+            )
+
+        logger.info(f"Indexing sample document: {request.sample}")
+
+        summary = rag_service.index_document(str(sample_path))
+
+        logger.info(f"Successfully indexed sample: {request.sample}")
+
+        TOTAL_PIPELINE_TIME.observe(
+            perf_counter() - start
+        )
+
+        return summary
+
+
+@router.post(
     "/ask",
     response_model=AskResponse,
 )
@@ -107,7 +146,7 @@ def ask(
 
         logger.info("Chat request received")
 
-        answer = rag_service.ask(request.question)
+        response = rag_service.ask(request.question)
 
         logger.info("Chat response sent")
 
@@ -115,6 +154,5 @@ def ask(
             perf_counter() - start
         )
 
-        return {
-            "answer": answer,
-        }
+                
+        return response

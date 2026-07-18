@@ -17,6 +17,22 @@ class VectorStore:
             name=settings.collection_name
         )
 
+    def clear_collection(self) -> None:
+        """
+        Remove all vectors from the collection.
+        """
+
+        logger.info("Clearing existing vector collection")
+
+        ids = self.collection.get()["ids"]
+
+        if ids:
+            self.collection.delete(ids=ids)
+
+        logger.info("Vector collection cleared")
+
+        logger.info("Vector collection cleared")
+
     def add_documents(self, embedded_chunks: list[dict]) -> None:
         """
         Store embedded chunks in ChromaDB.

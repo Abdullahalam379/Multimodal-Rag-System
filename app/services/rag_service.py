@@ -36,11 +36,18 @@ class RAGService:
         logger.info(f"Ingestion produced {len(documents)} documents")
 
         chunks = self.chunker.chunk(documents)
+
         logger.info(f"Created {len(chunks)} chunks")
+
         embedded_chunks = self.embedder.embed(chunks)
+
         logger.info(f"Generated {len(embedded_chunks)} embeddings")
 
+        self.vector_store.clear_collection()
+
         self.vector_store.add_documents(embedded_chunks)
+
+
         logger.info("Indexing completed successfully")
         return {
             "status": "success",
@@ -48,6 +55,7 @@ class RAGService:
             "documents_extracted": len(documents),
             "chunks_created": len(chunks),
             "vectors_stored": len(embedded_chunks),
+
         }
 
     def ask(self, question: str) -> str:
@@ -67,5 +75,10 @@ class RAGService:
         context = self.retriever.build_context(retrieved_chunks)
 
         answer = self.generator.answer(question, context)
+
         logger.info("Answer generated successfully")
-        return answer
+
+        return {
+            "answer": answer,
+            "retrieved_chunks": retrieved_chunks,
+        }
