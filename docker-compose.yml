@@ -13,7 +13,6 @@ services:
 
     volumes:
       - ./data:/app/data
-      - ./chroma_db:/app/chroma_db
 
     restart: unless-stopped
 

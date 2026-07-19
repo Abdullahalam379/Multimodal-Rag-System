@@ -24,6 +24,15 @@ router = APIRouter()
 
 rag_service = RAGService()
 
+@router.get("/")
+def root():
+    return {
+        "name": "Multimodal RAG System",
+        "status": "running",
+        "docs": "/docs",
+        "health": "/health",
+        "version": "1.0.0",
+    }
 
 @router.get(
     "/health",
