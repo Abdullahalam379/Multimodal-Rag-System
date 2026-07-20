@@ -158,12 +158,22 @@ pytest
 ```
 
 Current tests include:
-
+- root
 - Health endpoint
 - Ask endpoint
 - Index endpoint
 
 ---
+
+
+Live API:
+https://multimodal-rag-system-production.up.railway.app
+
+Swagger:
+https://multimodal-rag-system-production.up.railway.app/docs
+
+Streamlit frontend:
+https://outstanding-happiness-production-85c2.up.railway.app/
 
 # 🐳 Running with Docker
 
